@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import NotificationContext from '../NotificationContext'
+import { useNotification } from '../NotificationContext'
 
-const Notification = ({ text }) => {
-  const [notification, dispatch] = useContext(NotificationContext)
+const Notification = () => {
+  const [notification, dispatch] = useNotification()
   const style = {
     border: 'solid',
     padding: 10,
@@ -10,13 +9,16 @@ const Notification = ({ text }) => {
     marginBottom: 5,
   }
 
-  // if (true) return null
+  if (notification && notification.message) {
+    const { message, timeout } = notification
+    setTimeout(() => {
+      dispatch({ type: 'HIDE' })
+    }, timeout)
 
-  return (
-    <div style={notification && style}>
-      {notification && dispatch({ text })}
-    </div>
-  )
+    return <div style={style}>{message}</div>
+  }
+
+  return null
 }
 
 export default Notification
